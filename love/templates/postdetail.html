@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+    Post Detail
+{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="card shadow">
+            <div class="row">
+                {% if post.images %}
+                    {% for p in post.images %}
+                        <img src="{{ p.image.url }}" class="col-md-4 col-lg-3">
+                    {% endfor %}
+                {% endif %}
+                <div class="col-md-8 col-lg-9">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.content }}</p>
+                        <p class="card-text">Author: {{ post.author }}</p>
+                        <p class="card-text">Posted: {{ post.create_date|naturaltime }}</p>
+                        <p class="card-text">Category: {{ post.category }}</p>
+                        {% if user.is_superuser or post.author.id == user.id %}
+                            <a href="/blog/update/{{ post.id }}/" class="btn btn-info me-2">Update</a>
+                            <a href="/blog/delete/{{ post.id }}/" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container my-5 py-3">
+            <h4 class="mb-4">Comments</h4>
+            {% for c in cmt %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="{{ c.author.userprofile.profile_picture.url }}" alt="avatar" class="rounded-circle me-3" width="50" height="50">
+                            <div>
+                                <h5 class="card-title">{{ c.author }}</h5>
+                                <p class="card-text small">{{ c.create_date|naturaltime }}</p>
+                            </div>
+                        </div>
+                        <p class="card-text">{{ c.content }}</p>
+                        {% if user.is_superuser or c.author.id == user.id %}
+                            <div class="text-end">
+                                <a href="/blog/cmt/update/{{ post.id }}/{{ c.id }}/" class="btn btn-sm btn-info me-2">Update</a>
+                                <a href="/blog/cmt/delete/{{ post.id }}/{{ c.id }}/" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger">Delete</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="container mb-5">
+            <form method="POST" class="card shadow p-3">
+                {% csrf_token %}
+                <textarea name="content" required style="height: 130px;" class="form-control mb-2"></textarea>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

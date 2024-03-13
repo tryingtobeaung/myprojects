@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+    Post list
+{% endblock %}
+
+{% block body %}
+
+<style>
+    .posts-container {
+        background-image: url('path_to_your_background_image.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 50px; /* Adjust padding as needed */
+    }
+</style>
+
+<div class="container-fluid posts-container">
+    <div class="row d-flex justify-content-center mx-auto">
+        {% if posts %}
+            {% for p in posts %}
+            <div class="card col-3 col-sm-6 col-md-4 col-lg-3 col-xl-2 shadow m-2" style="width: 18rem;">
+            {% if p.images %}
+                
+                <img src="{{p.images.image.url}}" class="card-img-top">
+            
+            {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{p.title}}</h5>
+                    <p class="card-text">{{p.content}}</p>
+                    <p class="card-text">{{p.author}}</p>
+                    <p class="card-text">{{p.create_date|naturaltime}}/{{p.author}}</p>
+                    <p class="card-text">{{p.category}}</p>
+                    <a href="/blog/detail/{{p.id}}/" class="btn btn-primary">Detail</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}   
+        
+            <h3 align="center" class="card p-3 shadow"> <br><br><br><br><br><br><br><br>Post Not Found !<br><br><br><br><br><br><br><br> </h3> 
+        
+        {% endif %}
+
+        {% if posts.has_other_pages %}
+            <div style="display: flex; justify-content: center;">
+                <nav aria-label="Topics pagination" class="mb-4">
+                    <ul class="pagination">
+                        {% if posts.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                        {% endif %}
+                            {% for page_num in posts.paginator.page_range %}
+                        {% if posts.number == page_num %}
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    {{ page_num }}
+                                </span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                            </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if posts.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

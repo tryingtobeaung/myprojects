@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block body %}
+
+<style>
+    .profile-background {
+        background-image: url('https://i.pinimg.com/originals/94/ee/62/94ee62a358b199c2fdfdc3afd02ce760.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+    
+    .transparent-card {
+        background-color: rgba(255, 255, 255, 0.5); 
+    }
+    
+    
+    .update-profile-btn {
+        background-color: #ff6b6b; 
+        color: #ffffff; 
+        border: none;
+        border-radius: 20px; 
+        padding: 10px 20px; 
+        font-size: 16px; 
+        transition: all 0.3s ease-in-out;
+    }
+
+    .update-profile-btn:hover {
+        transform: translateY(-3px); /* Move button up on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); 
+    }
+</style>
+
+<div class="container-fluid profile-background mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg transparent-card">
+                <div class="card-body text-center">
+                    {% if user_profile.profile_picture %}
+                        <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px;">
+                    {% else %}
+                        
+                        <div class="default-profile-picture"></div>
+                    {% endif %}
+                    <h2 class="card-title">{{ user_profile.user.username }}</h2>
+                    <p class="card-text">{{ user_profile.bio }}</p>
+                    <a href="{% url 'update_profile' %}" class="btn update-profile-btn">Update Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Update Profile
+{% endblock %}
+
+{% block body %}
+<style>
+    .profile-background {
+        background-image: url('https://i.pinimg.com/originals/94/ee/62/94ee62a358b199c2fdfdc3afd02ce760.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+    
+    .transparent-card {
+        background-color: rgba(255, 255, 255, 0.5);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+        background-color: #ff6b6b;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-primary:hover {
+        background-color: #ff8686;
+    }
+</style>
+
+<div class="container-fluid profile-background mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg transparent-card">
+                <div class="card-body text-center">
+                    <h1>Update Profile</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
